@@ -32,6 +32,7 @@
 
 <script>
 import Tomato from "@/components/Tomato"
+import NotificationIcon from '@/assets/icons/notification.png'
 import { mapState } from 'vuex'
 
 export default {
@@ -73,23 +74,13 @@ export default {
           break
       }
     },
-    setSessionLength(length) {
-      this.sessionLength = length
-    },
     startTimer() {
       this.remainingSeconds = this.sessionLength
       this.timer = setInterval(() => this.timerTick(), 1000)
       this.isTimerRunning = true
-      //new Notification('Pomodoro Timer', { body: 'New pomodoro has started', icon: notificationIcon});
-      //new Notification('Pomodoro Timer', { body: 'New pomodoro has started'})
-      /*
-      var audio = new Audio('http://javierjimenez.net/media/timer_start.wav');
-      audio.play();
-      this.todo.started = true;
-      this.todo.running = true;
-      this.$emit('timer-start', this.todo.task_id);
-      this.$forceUpdate();
-       */
+
+      let msg = this.isPomodoro ? 'New pomodoro has started' : 'Take a break!'
+      new Notification('Tomatino', { body: msg, icon: NotificationIcon})
     },
     resetTimer() {
       clearInterval(this.timer)
@@ -99,6 +90,9 @@ export default {
     },
     finishSession() {
       this.resetTimer()
+
+      let msg = this.isPomodoro ? 'Pomodoro has ended' : 'Break has ended'
+      new Notification('Tomatino', { body: msg, icon: NotificationIcon})
 
       if (this.isPomodoro) {
         this.totalPomodoros++
@@ -117,12 +111,6 @@ export default {
       } else {
         this.selectSessionType('pomodoro')
       }
-
-      /*
-      this.todo.running = false;
-      this.$emit('timer-stop', this.todo.task_id)
-      this.$forceUpdate();
-       */
     },
     padTime: function(time) {
       return (time < 10 ? '0' : '') + time
