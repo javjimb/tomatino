@@ -3,7 +3,10 @@
 
     <tomato timer-mode="huhu" ></tomato>
 
-    <div class="clock">{{minutes}}:{{seconds}}</div>
+    <div v-if="isTimerRunning" class="clock">{{minutes}}:{{seconds}}</div>
+    <div v-if="!isTimerRunning" class="clock">
+      {{ sessionLength / 60 }}:00
+    </div>
 
     <div class="controls">
       <div v-if="!isTimerRunning" @click="startTimer">Play</div>
@@ -11,7 +14,13 @@
     </div>
 
     <br />
-    Pomodoro | Short Break | Long Break
+    <div v-if="!isTimerRunning">
+      <a @click="setSessionLength(settings.pomodoroLength)">Pomodoro</a>
+      |
+      <a @click="setSessionLength(settings.shortBreakLength)">Short Break</a>
+      |
+      <a @click="setSessionLength(settings.longBreakLength)">Long Break</a>
+    </div>
     <br />
     <br />
 
@@ -20,7 +29,8 @@
 </template>
 
 <script>
-import Tomato from "@/components/Tomato";
+import Tomato from "@/components/Tomato"
+import { mapState } from 'vuex'
 
 export default {
   name: 'App',
@@ -28,13 +38,19 @@ export default {
     Tomato
   },
   data: () => ({
-    sessionLength: 25 * 60,
+    sessionLength: 0,
     elapsedSeconds: 0,
     remainingSeconds: 0,
     isTimerRunning: false,
     timer: null
   }),
+  created() {
+    this.sessionLength = this.settings.pomodoroLength
+  },
   methods: {
+    setSessionLength(length) {
+      this.sessionLength = length
+    },
     startTimer() {
       this.remainingSeconds = this.sessionLength
       this.timer = setInterval(() => this.timerTick(), 1000)
@@ -79,7 +95,8 @@ export default {
     seconds: function() {
       const seconds = Math.floor((this.remainingSeconds % 3600) % 60);
       return this.padTime(seconds);
-    }
+    },
+    ...mapState({ settings: state => state.settings })
   }
 }
 </script>
