@@ -1,7 +1,9 @@
 <template>
   <div id="app">
 
-    <tomato timer-mode="huhu" ></tomato>
+    {{progress}}%
+
+    <tomato :is-pomodoro="isPomodoro" :progress="progress" ></tomato>
 
     <div v-if="isTimerRunning" class="clock">{{minutes}}:{{seconds}}</div>
     <div v-if="!isTimerRunning" class="clock">
@@ -39,7 +41,6 @@ export default {
   },
   data: () => ({
     sessionLength: 0,
-    elapsedSeconds: 0,
     remainingSeconds: 0,
     isTimerRunning: false,
     isPomodoro: false,
@@ -141,6 +142,12 @@ export default {
     seconds: function() {
       const seconds = Math.floor((this.remainingSeconds % 3600) % 60);
       return this.padTime(seconds);
+    },
+    elapsedSeconds: function() {
+      return this.sessionLength - this.remainingSeconds
+    },
+    progress: function() {
+      return (this.elapsedSeconds * 100) / this.sessionLength
     },
     ...mapState({ settings: state => state.settings })
   }
