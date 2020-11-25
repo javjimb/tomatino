@@ -3,7 +3,10 @@
 const state = {
   pomodoroLength: 25 * 60,
   shortBreakLength: 5 * 60,
-  longBreakLength: 15 * 60
+  longBreakLength: 15 * 60,
+  startBreakAutomatically: false,
+  shortBreakAmount: 4,
+  enableSoundEffects: false
 }
 
 const getters = {}

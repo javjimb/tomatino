@@ -10,21 +10,21 @@
 
     <div class="controls">
       <div v-if="!isTimerRunning" @click="startTimer">Play</div>
-      <div v-if="isTimerRunning" @click="stopTimer">Stop</div>
+      <div v-if="isTimerRunning" @click="resetTimer">Cancel</div>
     </div>
 
     <br />
     <div v-if="!isTimerRunning">
-      <a @click="setSessionLength(settings.pomodoroLength)">Pomodoro</a>
+      <a @click="selectSessionType('pomodoro')">Pomodoro</a>
       |
-      <a @click="setSessionLength(settings.shortBreakLength)">Short Break</a>
+      <a @click="selectSessionType('short-break')">Short Break</a>
       |
-      <a @click="setSessionLength(settings.longBreakLength)">Long Break</a>
+      <a @click="selectSessionType('long-break')">Long Break</a>
     </div>
     <br />
     <br />
 
-    Pomodoros completed: 0
+    Pomodoros completed: {{totalPomodoros}}
   </div>
 </template>
 
@@ -42,12 +42,36 @@ export default {
     elapsedSeconds: 0,
     remainingSeconds: 0,
     isTimerRunning: false,
-    timer: null
+    isPomodoro: false,
+    isShortBreak: false,
+    timer: null,
+    totalPomodoros: 0,
+    totalShortBreaks: 0
   }),
   created() {
     this.sessionLength = this.settings.pomodoroLength
+    this.isPomodoro = true
   },
   methods: {
+    selectSessionType(type) {
+      switch (type) {
+        case 'pomodoro':
+          this.sessionLength = this.settings.pomodoroLength
+          this.isPomodoro = true
+          this.isShortBreak = false
+          break
+        case 'short-break':
+          this.sessionLength = this.settings.shortBreakLength
+          this.isPomodoro = false
+          this.isShortBreak = true
+          break
+        case 'long-break':
+          this.sessionLength = this.settings.longBreakLength
+          this.isPomodoro = false
+          this.isShortBreak = false
+          break
+      }
+    },
     setSessionLength(length) {
       this.sessionLength = length
     },
@@ -66,11 +90,33 @@ export default {
       this.$forceUpdate();
        */
     },
-    stopTimer() {
+    resetTimer() {
       clearInterval(this.timer)
       this.timer = null
       this.remainingSeconds = 0
       this.isTimerRunning = false
+    },
+    finishSession() {
+      this.resetTimer()
+
+      if (this.isPomodoro) {
+        this.totalPomodoros++
+      } else if (this.isShortBreak) {
+        this.totalShortBreaks++
+      }
+
+      if (this.isPomodoro && this.settings.startBreakAutomatically) {
+        if (this.totalShortBreaks === this.settings.shortBreakAmount) {
+          this.selectSessionType('long-break')
+          this.totalShortBreaks = 0
+        } else {
+          this.selectSessionType('short-break')
+        }
+        this.startTimer()
+      } else {
+        this.selectSessionType('pomodoro')
+      }
+
       /*
       this.todo.running = false;
       this.$emit('timer-stop', this.todo.task_id)
@@ -83,7 +129,7 @@ export default {
     timerTick: function() {
       this.remainingSeconds--
       if (this.remainingSeconds === 0) {
-        this.stopTimer()
+        this.finishSession()
       }
     }
   },
