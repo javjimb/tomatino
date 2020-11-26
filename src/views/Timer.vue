@@ -1,6 +1,5 @@
 <template>
-  <div id="app">
-    {{progress}}%
+  <div class="text-center">
 
     <tomato :is-pomodoro="isPomodoro" :progress="progress" ></tomato>
 
@@ -10,8 +9,24 @@
     </div>
 
     <div class="controls">
-      <div v-if="!isTimerRunning" @click="startTimer">Play</div>
-      <div v-if="isTimerRunning" @click="resetTimer">Cancel</div>
+      <v-btn
+          large
+          outlined
+          fab
+          v-if="!isTimerRunning"
+          @click="startTimer"
+      >
+        <v-icon>mdi-play</v-icon>
+      </v-btn>
+      <v-btn
+          large
+          outlined
+          fab
+          v-if="isTimerRunning"
+          @click="resetTimer"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </div>
 
     <br />
@@ -142,17 +157,6 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  margin-top: 60px;
-}
-body {
-  background-color: #E6203C;
-  color: black;
-}
 .clock {
   font-size: 6rem;
 }
