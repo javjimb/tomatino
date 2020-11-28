@@ -26,7 +26,7 @@
           depressed
           fab
           v-if="isTimerRunning"
-          @click="resetTimer"
+          @click="resetTimer(true)"
           class="error--text"
       >
         <v-icon>mdi-close</v-icon>
@@ -75,6 +75,9 @@
 import Tomato from "@/components/Tomato"
 import NotificationIcon from '@/assets/icons/notification.png'
 import { mapState } from 'vuex'
+import startWav from '@/assets/sounds/timer_start.wav'
+import stopWav from '@/assets/sounds/timer_stop.wav'
+import finishWav from '@/assets/sounds/timer_finish.wav'
 
 export default {
   name: 'App',
@@ -89,11 +92,19 @@ export default {
     isShortBreak: false,
     timer: null,
     totalPomodoros: 0,
-    totalShortBreaks: 0
+    totalShortBreaks: 0,
+    startSound: null,
+    stopSound: null,
+    finishSound: null
   }),
   created() {
     this.sessionLength = this.settings.pomodoroLength
     this.isPomodoro = true
+
+    // Initialize sound
+    this.startSound = new Audio(startWav)
+    this.stopSound = new Audio(stopWav)
+    this.finishSound = new Audio(finishWav)
   },
   methods: {
     selectSessionType(type) {
@@ -115,7 +126,25 @@ export default {
           break
       }
     },
-    startTimer() {
+    playSound(name) {
+      if (this.settings.enableSoundEffects) {
+        switch (name) {
+          case 'start':
+            this.startSound.play()
+            break;
+          case 'stop':
+            this.stopSound.play()
+            break;
+          case 'finish':
+            this.finishSound.play()
+            break;
+        }
+      }
+    },
+    startTimer(playSound) {
+      if (playSound) {
+        this.playSound('start')
+      }
       this.remainingSeconds = this.sessionLength
       this.timer = setInterval(() => this.timerTick(), 1000)
       this.isTimerRunning = true
@@ -123,14 +152,18 @@ export default {
       let msg = this.isPomodoro ? 'New pomodoro has started' : 'Take a break!'
       new Notification('Tomatino', { body: msg, icon: NotificationIcon})
     },
-    resetTimer() {
+    resetTimer(playSound) {
+      if (playSound) {
+        this.playSound('stop')
+      }
       clearInterval(this.timer)
       this.timer = null
       this.remainingSeconds = 0
       this.isTimerRunning = false
     },
     finishSession() {
-      this.resetTimer()
+      this.playSound('finish')
+      this.resetTimer(false)
 
       let msg = this.isPomodoro ? 'Pomodoro has ended' : 'Break has ended'
       new Notification('Tomatino', { body: msg, icon: NotificationIcon})
@@ -148,7 +181,7 @@ export default {
         } else {
           this.selectSessionType('short-break')
         }
-        this.startTimer()
+        this.startTimer(false)
       } else {
         this.selectSessionType('pomodoro')
       }
@@ -163,6 +196,7 @@ export default {
       }
     }
   },
+
   computed: {
     minutes: function() {
       const minutes = Math.floor((this.remainingSeconds % 3600) / 60)

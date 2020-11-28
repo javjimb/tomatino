@@ -76,7 +76,7 @@
       </div>
       <div class="switch-container-switch">
         <v-switch
-            v-model="startBreakAutomatically"
+            v-model="enableSoundEffects"
             inset
             flat
         ></v-switch>
@@ -138,6 +138,14 @@ export default {
       },
       set(value) {
         this.$store.dispatch('settings/setStartBreakAutomatically', value)
+      }
+    },
+    enableSoundEffects: {
+      get() {
+        return this.$store.state.settings.enableSoundEffects
+      },
+      set(value) {
+        this.$store.dispatch('settings/setEnableSoundEffects', value)
       }
     }
   }
