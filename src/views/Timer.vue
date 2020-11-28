@@ -1,7 +1,7 @@
 <template>
-  <div class="text-center">
+  <div class="timer-container text-center">
 
-    <tomato :is-pomodoro="isPomodoro" :progress="progress" ></tomato>
+    <tomato  :is-pomodoro="isPomodoro" :progress="progress" ></tomato>
 
     <div v-if="isTimerRunning" class="clock">{{minutes}}:{{seconds}}</div>
     <div v-if="!isTimerRunning" class="clock">
@@ -11,36 +11,63 @@
     <div class="controls">
       <v-btn
           large
-          outlined
+          dark
+          depressed
           fab
           v-if="!isTimerRunning"
           @click="startTimer"
+          class="error--text"
       >
         <v-icon>mdi-play</v-icon>
       </v-btn>
       <v-btn
           large
-          outlined
+          dark
+          depressed
           fab
           v-if="isTimerRunning"
           @click="resetTimer"
+          class="error--text"
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </div>
 
     <br />
-    <div v-if="!isTimerRunning">
-      <a @click="selectSessionType('pomodoro')">Pomodoro</a>
-      |
-      <a @click="selectSessionType('short-break')">Short Break</a>
-      |
-      <a @click="selectSessionType('long-break')">Long Break</a>
+
+    <div v-show="!isTimerRunning">
+      <v-btn
+          depressed
+          dark
+          color="error--text"
+          @click="selectSessionType('pomodoro')"
+          class="mr-3"
+      >
+        Pomodoro
+      </v-btn>
+      <v-btn
+          depressed
+          dark
+          color="error--text"
+          @click="selectSessionType('short-break')"
+          class="mr-3"
+      >
+        Short break
+      </v-btn>
+      <v-btn
+          depressed
+          dark
+          color="error--text"
+          @click="selectSessionType('long-break')"
+      >
+        Long break
+      </v-btn>
     </div>
     <br />
-    <br />
 
-    Pomodoros completed: {{totalPomodoros}}
+    <p class="completed-container">
+      Pomodoros completed: {{totalPomodoros}}
+    </p>
   </div>
 </template>
 
@@ -156,11 +183,25 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+@font-face {
+  font-family: "digital-7";
+  src: local("digital-7"),
+  url("../assets/fonts/digital-7.ttf")
+  format("truetype");
+}
+.timer-container {
+  margin-top: 40px;
+}
 .clock {
-  font-size: 6rem;
+  font-family: "digital-7", "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 8rem;
 }
 .controls {
   font-size: 2rem;
+}
+.completed-container {
+  color: #272727;
+  font-weight: bolder;
 }
 </style>

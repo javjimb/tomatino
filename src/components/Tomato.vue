@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="tomatoImage" alt="Tomato" />
+    <img height="240" class="tomato-image" :src="tomatoImage" alt="Tomato" />
   </div>
 </template>
 
@@ -41,3 +41,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>

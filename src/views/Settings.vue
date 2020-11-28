@@ -1,7 +1,7 @@
 <template>
   <div class="settings-container">
 
-    <settings-label label="Pomodoro length"></settings-label>
+    <settings-label :label="`Pomodoro duration: ${pomodoroLength}`"></settings-label>
     <v-slider
         v-model="pomodoroLength"
         step="5"
@@ -15,7 +15,7 @@
         ticks
     ></v-slider>
 
-    <settings-label label="Short break length"></settings-label>
+    <settings-label :label="`Short break duration: ${shortBreakLength}`"></settings-label>
     <v-slider
         v-model="shortBreakLength"
         step="1"
@@ -29,7 +29,7 @@
         ticks
     ></v-slider>
 
-    <settings-label label="Long break length"></settings-label>
+    <settings-label :label="`Long break duration: ${longBreakLength}`"></settings-label>
     <v-slider
         v-model="longBreakLength"
         step="5"
@@ -43,7 +43,7 @@
         ticks
     ></v-slider>
 
-    <settings-label label="Amount of consecutive short breaks"></settings-label>
+    <settings-label :label="`Pomodoro sessions before long break: ${shortBreakAmount}`"></settings-label>
     <v-slider
         v-model="shortBreakAmount"
         step="1"
