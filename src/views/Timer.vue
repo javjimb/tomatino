@@ -1,16 +1,31 @@
 <template>
   <div class="timer-container text-center">
 
-    <tomato  :is-pomodoro="isPomodoro" :progress="progress" ></tomato>
+      <v-card
+          class="mx-auto"
+          max-width="344"
+          color="#E6203C"
+          flat
+      >
+        <tomato  :is-pomodoro="isPomodoro" :progress="progress" ></tomato>
 
-    <div v-if="isTimerRunning" class="clock">{{minutes}}:{{seconds}}</div>
-    <div v-if="!isTimerRunning" class="clock">
-      {{ sessionLength / 60 }}:00
-    </div>
+        <div v-if="isTimerRunning" style="text-align: center !important;">
+          <v-progress-linear height="10" :value="progress"></v-progress-linear>
+          <v-card-subtitle v-if="isPomodoro">Time focus</v-card-subtitle>
+          <v-card-subtitle v-if="!isPomodoro">Take a break!</v-card-subtitle>
+        </div>
+
+        <div v-if="isTimerRunning" class="clock">{{minutes}}:{{seconds}}</div>
+        <div v-if="!isTimerRunning" class="clock">
+          {{ sessionLength / 60 }}:00
+        </div>
+
+      </v-card>
+
+
 
     <div class="controls">
       <v-btn
-          large
           dark
           depressed
           fab
@@ -21,7 +36,6 @@
         <v-icon>mdi-play</v-icon>
       </v-btn>
       <v-btn
-          large
           dark
           depressed
           fab
@@ -222,7 +236,7 @@ export default {
   margin-top: 40px;
 }
 .clock {
-  font-size: 8rem;
+  font-size: 5rem;
 }
 .controls {
   font-size: 2rem;
