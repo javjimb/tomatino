@@ -218,17 +218,10 @@ export default {
 </script>
 
 <style scoped>
-@font-face {
-  font-family: "digital-7";
-  src: local("digital-7"),
-  url("../assets/fonts/digital-7.ttf")
-  format("truetype");
-}
 .timer-container {
   margin-top: 40px;
 }
 .clock {
-  font-family: "digital-7", "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 8rem;
 }
 .controls {

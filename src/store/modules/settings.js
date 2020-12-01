@@ -5,7 +5,7 @@ const state = {
   longBreakLength: 15 * 60,
   startBreakAutomatically: true,
   shortBreakAmount: 4,
-  enableSoundEffects: false
+  enableSoundEffects: true
 }
 
 const getters = {}
