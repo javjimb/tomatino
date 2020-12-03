@@ -9,6 +9,8 @@ import TomatoNeutral from '@/assets/images/tomate.png'
 import TomatoUp from '@/assets/images/tomate-up.png'
 import TomatoStressed from '@/assets/images/tomate-stressed.png'
 import TomatoHappy from '@/assets/images/tomate-happy.png'
+import TomatoGoodMorning from '@/assets/images/tomate-good-morning.png'
+import TomatoExhausted from '@/assets/images/tomate-exhausted.png'
 
 export default {
   name: 'Tomato',
@@ -24,7 +26,21 @@ export default {
   },
   computed: {
     tomatoImage() {
+
       if (this.progress === 100) {
+
+        const today = new Date()
+        // early morning
+        if (today.getHours() >= 6 && today.getHours() < 10) {
+          return TomatoGoodMorning
+        }
+        // late evening
+        if (today.getHours() >= 21 && today.getHours() < 3) {
+          return TomatoExhausted
+        }
+
+        console.warn('ispomodo')
+
         return TomatoNeutral
       }
 
