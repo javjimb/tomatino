@@ -16,9 +16,7 @@
         </div>
 
         <div v-if="isTimerRunning" class="clock">{{minutes}}:{{seconds}}</div>
-        <div v-if="!isTimerRunning" class="clock">
-          {{ sessionLength / 60 }}:00
-        </div>
+        <div v-if="!isTimerRunning" class="clock">{{ sessionLength / 60 }}:00</div>
 
       </v-card>
 
