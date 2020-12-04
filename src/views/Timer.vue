@@ -97,14 +97,7 @@ export default {
     Tomato
   },
   data: () => ({
-    sessionLength: 0,
-    remainingSeconds: 0,
-    isTimerRunning: false,
-    isPomodoro: false,
-    isShortBreak: false,
     timer: null,
-    totalPomodoros: 0,
-    totalShortBreaks: 0,
     startSound: null,
     stopSound: null,
     finishSound: null
@@ -224,7 +217,66 @@ export default {
     progress: function() {
       return (this.elapsedSeconds * 100) / this.sessionLength
     },
-    ...mapState({ settings: state => state.settings })
+    sessionLength: {
+      get() {
+        return this.$store.state.session.sessionLength
+      },
+      set(seconds) {
+        this.$store.dispatch('session/setSessionLength', seconds)
+      }
+    },
+    remainingSeconds: {
+      get() {
+        return this.$store.state.session.remainingSeconds
+      },
+      set(seconds) {
+        this.$store.dispatch('session/setRemainingSeconds', seconds)
+      }
+    },
+    isTimerRunning: {
+      get() {
+        return this.$store.state.session.isTimerRunning
+      },
+      set(value) {
+        this.$store.dispatch('session/setIsTimerRunning', value)
+      }
+    },
+    isPomodoro: {
+      get() {
+        return this.$store.state.session.isPomodoro
+      },
+      set(value) {
+        this.$store.dispatch('session/setIsPomodoro', value)
+      }
+    },
+    isShortBreak: {
+      get() {
+        return this.$store.state.session.isShortBreak
+      },
+      set(value) {
+        this.$store.dispatch('session/setIsShortBreak', value)
+      }
+    },
+    totalPomodoros: {
+      get() {
+        return this.$store.state.session.totalPomodoros
+      },
+      set(value) {
+        this.$store.dispatch('session/setTotalPomodoros', value)
+      }
+    },
+    totalShortBreaks: {
+      get() {
+        return this.$store.state.session.totalShortBreaks
+      },
+      set(value) {
+        this.$store.dispatch('session/setTotalShortBreaks', value)
+      }
+    },
+    ...mapState({
+      settings: state => state.settings,
+      session: state => state.session
+    })
   }
 }
 </script>
