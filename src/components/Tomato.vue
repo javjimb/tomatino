@@ -11,6 +11,8 @@ import TomatoStressed from '@/assets/images/tomate-stressed.png'
 import TomatoHappy from '@/assets/images/tomate-happy.png'
 import TomatoGoodMorning from '@/assets/images/tomate-good-morning.png'
 import TomatoExhausted from '@/assets/images/tomate-exhausted.png'
+import TomatoSleepy from '@/assets/images/tomate-sleepy.png'
+import TomatoQuestion from '@/assets/images/tomate-question.png'
 
 export default {
   name: 'Tomato',
@@ -39,7 +41,13 @@ export default {
           return TomatoExhausted
         }
 
-        console.warn('ispomodo')
+        if (this.$store.state.session.totalPomodoros > 10) {
+          return TomatoSleepy
+        }
+
+        if (this.$store.state.session.isSessionInterrupted) {
+          return TomatoQuestion
+        }
 
         return TomatoNeutral
       }

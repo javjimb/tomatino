@@ -6,7 +6,8 @@ const state = {
   isPomodoro: false,
   isShortBreak: false,
   totalPomodoros: 0,
-  totalShortBreaks: 0
+  totalShortBreaks: 0,
+  isSessionInterrupted: false
 }
 
 const getters = {}
@@ -32,6 +33,9 @@ const mutations = {
   },
   SET_TOTAL_SHORT_BREAKS(state, payload) {
     state.totalShortBreaks = payload
+  },
+  SET_IS_SESSION_INTERRUPTED(state, payload) {
+    state.isSessionInterrupted = payload
   }
 }
 
@@ -56,6 +60,9 @@ const actions = {
   },
   setTotalShortBreaks(context, value) {
     context.commit('SET_TOTAL_SHORT_BREAKS', value)
+  },
+  setIsSessionInterrupted(context, value) {
+    context.commit('SET_IS_SESSION_INTERRUPTED', value)
   }
 }
 

@@ -38,7 +38,7 @@
           depressed
           fab
           v-if="isTimerRunning"
-          @click="resetTimer(true)"
+          @click="cancelSession()"
           class="error--text"
       >
         <v-icon>mdi-close</v-icon>
@@ -147,20 +147,21 @@ export default {
       }
     },
     startTimer(playSound) {
-      if (playSound) {
-        this.playSound('start')
-      }
+      playSound && this.playSound('start')
       this.remainingSeconds = this.sessionLength
       this.timer = setInterval(() => this.timerTick(), 1000)
       this.isTimerRunning = true
+      this.isSessionInterrupted = false
 
       let msg = this.isPomodoro ? 'New pomodoro has started' : 'Take a break!'
       new Notification('Tomatino', { body: msg, icon: NotificationIcon})
     },
-    resetTimer(playSound) {
-      if (playSound) {
-        this.playSound('stop')
-      }
+    cancelSession() {
+      this.playSound('stop')
+      this.resetTimer()
+      this.isSessionInterrupted = true
+    },
+    resetTimer() {
       clearInterval(this.timer)
       this.timer = null
       this.remainingSeconds = 0
@@ -168,7 +169,7 @@ export default {
     },
     finishSession() {
       this.playSound('finish')
-      this.resetTimer(false)
+      this.resetTimer()
 
       let msg = this.isPomodoro ? 'Pomodoro has ended' : 'Break has ended'
       new Notification('Tomatino', { body: msg, icon: NotificationIcon})
@@ -271,6 +272,14 @@ export default {
       },
       set(value) {
         this.$store.dispatch('session/setTotalShortBreaks', value)
+      }
+    },
+    isSessionInterrupted: {
+      get() {
+        return this.$store.state.session.isSessionInterrupted
+      },
+      set(value) {
+        this.$store.dispatch('session/setIsSessionInterrupted', value)
       }
     },
     ...mapState({
