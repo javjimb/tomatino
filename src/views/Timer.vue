@@ -75,11 +75,9 @@
         Long break
       </v-btn>
     </div>
-    <br />
 
-    <p class="completed-container">
-      Pomodoros completed: {{totalPomodoros}}
-    </p>
+    <completed-sessions v-if="totalPomodoros" :total="totalPomodoros"></completed-sessions>
+
   </div>
 </template>
 
@@ -90,17 +88,19 @@ import { mapState } from 'vuex'
 import startWav from '@/assets/sounds/timer_start.wav'
 import stopWav from '@/assets/sounds/timer_stop.wav'
 import finishWav from '@/assets/sounds/timer_finish.wav'
+import CompletedSessions from "@/components/CompletedSessions";
 
 export default {
   name: 'App',
   components: {
+    CompletedSessions,
     Tomato
   },
   data: () => ({
     timer: null,
     startSound: null,
     stopSound: null,
-    finishSound: null
+    finishSound: null,
   }),
   created() {
     this.sessionLength = this.settings.pomodoroLength
@@ -299,9 +299,5 @@ export default {
 }
 .controls {
   font-size: 2rem;
-}
-.completed-container {
-  color: #272727;
-  font-weight: bolder;
 }
 </style>
